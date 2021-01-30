@@ -105,10 +105,10 @@ For transformer differential protection is employed in general
 	-- transformer faults have low frequency oscillatory transients <5Khz
 	-- wavelet transform is used for the extraticg the information from transients
 	-- WT(waveler transform) can give time and frequency info simultaneously
-	-- fast fourier transform works well for smooth and uniform frequencies 
+	-- fast fourier transform(any efficient algo calculating DFT) works well for smooth and uniform frequencies 
 	-- WT works better with signals with  sharp discontinuities and non stationary nature
 	-- WT less commutations (O(N)) ,FFT (O(NlogN)) N being the number of samples
-	-- mother wavelet is a functions used for detecting and localising(<>) different types of faults transients
+	-- mother wavelet is a functions used for detecting and localising(<>) different types of faults transients,"daubechies wavelet fucntion works for the protection ckt
 	-- (<anti-aliasing filters>) appers to be same as the LPF
 	-- (<down sampled>)
 	-- (<high frequency detail coefficents>) in the range of 500-1000Hzare obtained 
@@ -121,6 +121,7 @@ For transformer differential protection is employed in general
 	-- 1. transducesrs and isolations 2. anti aliasing filter 3. sample and hold 4. ADC 5. multiplexer
 	-- a low pass filter is used to band limit the signal to the half of sampling frequency
 	-- a butterworth filter is good as to maintain the balance between the time domain response and the frequency domain response 
+	-- (<as the frequency responce is sharper the time response becomes worse>)
 
 ### disturbance detection
 	
