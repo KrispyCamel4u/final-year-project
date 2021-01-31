@@ -253,6 +253,61 @@ For transformer differential protection is employed in general
 	-- (<interharmonics>)
 	-- for the interharmonics Taylor Fourier multifrequency model was proposed
 	-- Fast TFM reduces the complixity of simplifying procedures of seeking frequency components
-	--
+	-- ddc is modelled with two exponential functions and a time constant is needed for it (by enumeration method)
+	-- the observation window is two cylce long and the response time is no longer than 40ms
+
+### signal model
+	
+	
 
 
+
+# dictionary based PMU
+	
+	- due to presence of the renewable and other non-linear sources increase the harmonic content and then the chance of false tripping increases
+	- says the DFT is not suitable for dynamics and transients (i think referring to the incapabilities of removing ddc)
+	- aims to make the low cost pmu which is capable in estimating during the transients with lower numbers of samples
+	
+### proposed phasor estimation 
+
+	- considers the noise,harmonics and ddc
+	- it is posible to reduce the sampling rates 
+	- two precalculated matrix are required, dimension of which depends on number of sample chosen
+	- 1. coarse estimation
+		- the transpose of coarse matrix is then multiplied with sampled signal vector
+		- now we get Q and using the index of maximum value theta coarse is found out
+	- 2. fine estimation is very similar 
+	- using the matrix in fine estimation the magnitude is also calculated
+	- the estimation is fast .306ms
+	- and the TVE is less than 3%
+	-for test setups arduinos adc is used and a core2due to run the algorithm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# simple FCDFT
+	
+	- FCDFT need two extra samples for the compesation of ddc
+	- the main aim is to remove the ddc without using any extra samples
+	
+### proposed algo
+	
+	- adding N samples maked the sinosoidal part to be zero hence only ddc info is left 
+	- using the summation and iterative method the B,T are determined for the ddc and then ddc is deducted from the samples and FCDFT then can be applied
+	
+### results 
+	
+	- the results looks to be promissing and claims to be the fastest
+	- the algo is affected by the presence of noise 
+
+	
