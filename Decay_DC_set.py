@@ -12,7 +12,6 @@ w = 2*math.pi*f
 T = 1/(N*f)
 ##################
 
-
 def compute(t, gamma, tou):
     actual = Rm * math.sin(w*T*t + math.radians(theta))
 
@@ -38,13 +37,13 @@ if __name__ == "__main__":
         output_mag_err.append(temp2)
         output_mag_act.append(temp1)
 
-    with open("Dataset/DC_offset/My_mag_err.csv", "w", newline='') as ofile:
-        writer = csv.writer(ofile)
-        # writer.writerow(['time(s)', '30%', '50%', '70%', '90%'])
+    with open("DC_offset/My_mag_err.csv", "w") as file:
+        writer = csv.writer(file)
+        writer.writerow(['time(s)', '30%', '50%', '70%', '90%'])
         writer.writerows(output_mag_err)
 
-    with open("Dataset/DC_offset/My_mag_act.csv", "w", newline='') as ofile:
-        writer = csv.writer(ofile)
+    with open("DC_offset/My_mag_act.csv", "w") as file:
+        writer = csv.writer(file)
         writer.writerow(['time(s)', 'correct_value'])
         writer.writerows(output_mag_act)
 
@@ -65,13 +64,13 @@ if __name__ == "__main__":
         output_tou_err.append(temp2)
         output_tou_act.append(temp1)
 
-    with open("Dataset/DC_offset/My_tou_err.csv", "w+", newline='') as ofile:
-        writer = csv.writer(ofile)
-        writer.writerow(['time(s)', '10ms', '40ms', '70ms', '100ms'])
+    with open("DC_offset/My_tou_err.csv", "w") as file:
+        writer = csv.writer(file)
+        writer.writerow(['time(s)','10ms', '40ms', '70ms', '100ms'])
         writer.writerows(output_tou_err)
 
-    with open("Dataset/DC_offset/My_tou_act.csv", "w+", newline='') as ofile:
-        writer = csv.writer(ofile)
+    with open("DC_offset/My_tou_act.csv", "w") as file:
+        writer = csv.writer(file)
         writer.writerow(['time(s)', 'correct_value'])
         writer.writerows(output_tou_act)
     ### End of making dataset for varying tou ###
