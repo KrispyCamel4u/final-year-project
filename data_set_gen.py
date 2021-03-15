@@ -5,13 +5,13 @@ import numpy as np
 ### parameters ###
 N = 100
 Rm = 150
-f0 = 60
+f0 = 50
 theta = 10
 
 w = 2*math.pi*f0
 del_T = 1/(N*f0)
 
-num_cycle = 50
+num_cycle = 10
 # decaying DC
 # gamma 30% to 90%
 # tau 10 to 100ms
@@ -35,6 +35,20 @@ def compute_ddc(n, gamma, tou):
 
     return [round(actual, 4), round(with_off, 4)]
 
+
+## normal
+def normal():
+    output_mag_err = []
+    for i in range(1, num_cycle*N+1):
+        temp2 = [round(i*del_T, 4)]
+        temp = compute_ddc(i, 0, 1)
+        temp2.append(temp[1])
+        output_mag_err.append(temp2)
+
+    with open("Dataset/normal.csv", "w+", newline='') as ofile:
+        writer = csv.writer(ofile)
+        writer.writerow(['time(s)', 'signal'])
+        writer.writerows(output_mag_err)
 
 def ddc_offset():
     ### Fixed tou with varying mag ###
@@ -255,7 +269,7 @@ def freq_ramp():
         writer.writerow(header)
         writer.writerows(output_mag_err)
 
-
+normal()
 ddc_offset()
 harmonics()
 off_nominal_freq()
