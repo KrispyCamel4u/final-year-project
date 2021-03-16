@@ -7,29 +7,40 @@ N = 100  # number of samples per cycle
 f0=50
 del_t=1/(f0*N)
 
-def dft(wave):
+one_time=True
+A=0
+eq=0
+
+def dft(wave,mcycle):
     x1={}
     x2={}
+    global one_time
+    global A
+    global eq
     for k in range(3):
-        x1[k] = (2/N)*(sum((wave[i-1]*math.cos(2*math.pi*i/N) for i in range(k+1, N+1+k))))
-        x2[k] = (2/N)*(sum((wave[i-1]*math.sin(2*math.pi*i/N) for i in range(k+1, N+1+k))))
+        x1[k] = (2/N)*(sum((wave[i]*math.cos(2*math.pi*i/N) for i in range(k, N+k))))
+        x2[k] = -(2/N)*(sum((wave[i]*math.sin(2*math.pi*i/N) for i in range(k, N+k))))
     # print(x1)
-
-    eq=((x1[2]-x2[1])*math.cos(2*math.pi/N))/((x1[1]-x2[0])*math.cos(4*math.pi/N))
-    A= (0.5*N*(x1[0]-x1[1]))/ (math.cos(2*math.pi/N) * eq * (pow(eq,N)-1))
-    print(A,eq,(0.5*N*(x1[0]-x1[1])),(math.cos(2*math.pi/N) * eq * (pow(eq,N)-1)))
+    if one_time:
+        eq=((x1[2]-x2[1])*math.cos(2*math.pi/N))/((x1[1]-x2[0])*math.cos(4*math.pi/N))
+        A= -(0.5*N*(x1[1]-x1[0]))/ (math.cos(2*math.pi/N) * eq * (pow(eq,N)-1))
+        print(A,eq,(0.5*N*(x1[1]-x1[0])),(math.cos(2*math.pi/N) * eq * (pow(eq,N)-1)))
+        # one_time=False
 
     for i in range(N):
-        wave[i]-=A*pow(eq,i*del_t)
+        print("DDC",A*pow(eq,(i+N*mcycle)*del_t))
+        print('org',wave[i])
+        wave[i]-=A*pow(eq,(i+N*mcycle)*del_t)
+        print('mod',wave[i])
 
-    x11 = (2/N)*(sum((wave[i-1]*math.cos(2*math.pi*i/N) for i in range(0+1, 1+N+k))))
-    x21= (2/N)*(sum((wave[i-1]*math.sin(2*math.pi*i/N) for i in range(0+1, 1+N+k))))
+    x11 = (2/N)*(sum((wave[i]*math.cos(2*math.pi*i/N) for i in range(0, N))))
+    x21= -(2/N)*(sum((wave[i]*math.sin(2*math.pi*i/N) for i in range(0, N))))
     
     mag = math.sqrt(math.pow(x11, 2)+math.pow(x21, 2))
-    phaseAngle = math.atan(x11/x21)
+    phaseAngle = math.atan(x21/x11)
 
     # mag = math.sqrt(math.pow(x1[0], 2)+math.pow(x2[0], 2))
-    # phaseAngle = math.atan(x1[0]/x2[0])
+    # phaseAngle = math.atan(x2[0]/x1[0])
 
     return mag, math.degrees(phaseAngle)
 
@@ -45,7 +56,7 @@ with open(sys.argv[1], 'r') as ifile:
 mCycle = int(len(phase)/N)
 output = []
 for cycle in range(mCycle-1):
-    params = dft(phase[N*cycle:N+N*cycle+2])
+    params = dft(phase[N*cycle:N+N*cycle+2],cycle)
     output.append([cycle, params[0], params[1]])
     #print(cycle+1, params[0], params[1])
 

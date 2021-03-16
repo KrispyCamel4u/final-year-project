@@ -6,7 +6,7 @@ import numpy as np
 N = 100
 Rm = 150
 f0 = 50
-theta = 10
+theta = 30
 
 w = 2*math.pi*f0
 del_T = 1/(N*f0)
@@ -29,7 +29,7 @@ kx = 0.1   # phase modulation index
 
 
 def compute_ddc(n, gamma, tou):
-    actual = Rm * math.sin(w*del_T*n + math.radians(theta))
+    actual = Rm * math.cos(w*del_T*n + math.radians(theta))
 
     with_off = actual + gamma * math.exp(-1*(del_T*n)/tou)
 
@@ -39,10 +39,10 @@ def compute_ddc(n, gamma, tou):
 ## normal
 def normal():
     output_mag_err = []
-    for i in range(1, num_cycle*N+1):
+    for i in range(0, num_cycle*N+1):
         temp2 = [round(i*del_T, 4)]
         temp = compute_ddc(i, 0, 1)
-        temp2.append(temp[1])
+        temp2.append(temp[0])
         output_mag_err.append(temp2)
 
     with open("Dataset/normal.csv", "w+", newline='') as ofile:
@@ -54,7 +54,7 @@ def ddc_offset():
     ### Fixed tou with varying mag ###
     output_mag_err = []
     tou = 0.03
-    for i in range(1, num_cycle*N+1):
+    for i in range(0, num_cycle*N+1):
         temp2 = [round(i*del_T, 4)]
         for j in range(3, 10, 2):
             temp = compute_ddc(i, Rm*j/10, tou)
@@ -71,7 +71,7 @@ def ddc_offset():
     ### Fixed mag with varying tou ###
     output_tou_err = []
     gamma = 150*0.9
-    for i in range(1, num_cycle*N+1):
+    for i in range(0, num_cycle*N+1):
         temp2 = [round(i*del_T, 4)]
         for j in range(1, 11, 3):
             temp = compute_ddc(i, gamma, j/100)
@@ -90,12 +90,12 @@ def ddc_offset():
 
 def compute_harmonics(n, R2):
 
-    actual = Rm * math.sin(w*del_T*n + math.radians(theta))
+    actual = Rm * math.cos(w*del_T*n + math.radians(theta))
     with_har = actual
     mag_k = R2
     theta_k = theta
     for i in range(2, 11):
-        with_har += mag_k * math.sin(i*w*del_T*n + math.radians(theta_k))
+        with_har += mag_k * math.cos(i*w*del_T*n + math.radians(theta_k))
         mag_k *= 0.2
         theta_k /= i
 
@@ -106,7 +106,7 @@ def harmonics():
     output_mag_err = []
     header = ['time(s)']
 
-    for i in range(1, num_cycle*N+1):
+    for i in range(0, num_cycle*N+1):
         temp2 = [round(i*del_T, 4)]
         for j in np.arange(1.33, 6.66, 1):
             temp = compute_harmonics(i, Rm*j/100)
@@ -126,7 +126,7 @@ def harmonics():
 
 
 def compute_off_nominal(n, freq):
-    return round(Rm * math.sin(2*math.pi*freq*del_T*n + math.radians(theta)), 4)
+    return round(Rm * math.cos(2*math.pi*freq*del_T*n + math.radians(theta)), 4)
 
 
 off_nominal_step = 0.25
@@ -136,7 +136,7 @@ def off_nominal_freq():
     output_mag_err = []
     header = ['time(s)']
 
-    for i in range(1, num_cycle*N+1):
+    for i in range(0, num_cycle*N+1):
         temp2 = [round(i*del_T, 4)]
         for j in np.arange(f0-2, f0+2+off_nominal_step, off_nominal_step):
             temp = compute_off_nominal(i, j)
@@ -154,14 +154,14 @@ def off_nominal_freq():
 
 
 def compute_modulation(n, fm, kx, ka):
-    return round(Rm*(1+kx*math.sin(2*math.pi*fm*del_T*n)) * math.sin(w*del_T*n + ka*math.sin(2*math.pi*fm*del_T*n) + math.radians(theta)), 4)
+    return round(Rm*(1+kx*math.cos(2*math.pi*fm*del_T*n)) * math.cos(w*del_T*n + ka*math.cos(2*math.pi*fm*del_T*n) + math.radians(theta)), 4)
 
 
 def modulation():
     output_mag_err = []
     header = ['time(s)']
 
-    for i in range(1, num_cycle*N+1):
+    for i in range(0, num_cycle*N+1):
         temp2 = [round(i*del_T, 4)]
         for j in np.arange(f0-2, f0+2+off_nominal_step, off_nominal_step):   # modulation freq
             temp = compute_modulation(i, j, kx, 0)
@@ -178,7 +178,7 @@ def modulation():
     output_mag_err = []
     header = ['time(s)']
 
-    for i in range(1, num_cycle*N+1):
+    for i in range(0, num_cycle*N+1):
         temp2 = [round(i*del_T, 4)]
         for j in np.arange(f0-2, f0+2+off_nominal_step, off_nominal_step):   # modulation freq
             temp = compute_modulation(i, j, 0, ka)
@@ -200,7 +200,7 @@ def compute_step(n, step_start_n, kx, ka, sign=1):
         step_on = sign
     else:
         step_on = 0
-    return round(Rm*(1+kx*step_on) * math.sin(w*del_T*n + ka*step_on + math.radians(theta)), 4)
+    return round(Rm*(1+kx*step_on) * math.cos(w*del_T*n + ka*step_on + math.radians(theta)), 4)
 
 # by default produces +ve step but using sign var in compute step can be changed
 
@@ -209,7 +209,7 @@ def step():
     output_mag_err = []
     header = ['time(s)']
 
-    for i in range(1, num_cycle*N+1):
+    for i in range(0, num_cycle*N+1):
         temp2 = [round(i*del_T, 4)]
         for j in range(300, 420, 20):  # diffent time instants
             temp = compute_step(i, j, kx, 0, 1)
@@ -226,7 +226,7 @@ def step():
     output_mag_err = []
     header = ['time(s)']
 
-    for i in range(1, num_cycle*N+1):
+    for i in range(0, num_cycle*N+1):
         temp2 = [round(i*del_T, 4)]
         for j in range(300, 420, 20):  # diffent time instants
             temp = compute_step(i, j, 0, math.pi/18)
@@ -248,14 +248,14 @@ def compute_freq_ramp(n, ramp_start_n, ramp_rate, sign=1):
         ramp_on = sign
     else:
         ramp_on = 0
-    return round(Rm * math.sin(w*del_T*n + ramp_on*math.pi*ramp_rate*(del_T*n)**2 + math.radians(theta)), 4)
+    return round(Rm * math.cos(w*del_T*n + ramp_on*math.pi*ramp_rate*(del_T*n)**2 + math.radians(theta)), 4)
 
 
 def freq_ramp():
     output_mag_err = []
     header = ['time(s)']
 
-    for i in range(1, num_cycle*N+1):
+    for i in range(0, num_cycle*N+1):
         temp2 = [round(i*del_T, 4)]
         for j in range(300, 420, 20):  # diffent time instants
             temp = compute_freq_ramp(i, j, 1)

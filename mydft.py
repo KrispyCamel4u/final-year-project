@@ -7,10 +7,10 @@ N = 100  # number of samples per cycle
 
 
 def dft(wave):
-    x1 = (2/N)*(sum((wave[i-1]*math.cos(2*math.pi*i/N) for i in range(1, N+1))))
-    x2 = (2/N)*(sum((wave[i-1]*math.sin(2*math.pi*i/N) for i in range(1, N+1))))
+    x1 = (2/N)*(sum((wave[i]*math.cos(2*math.pi*i/N) for i in range(0, N))))
+    x2 = -(2/N)*(sum((wave[i]*math.sin(2*math.pi*i/N) for i in range(0, N))))
     mag = math.sqrt(math.pow(x1, 2)+math.pow(x2, 2))
-    phaseAngle = math.atan(x1/x2)
+    phaseAngle = math.atan(x2/x1)
     return mag, math.degrees(phaseAngle)
 
 
