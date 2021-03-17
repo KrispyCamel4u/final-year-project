@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import csv
 
-filee = 'Dataset/ddc_offset_mag.csv'
+filee = 'Dataset/normal.csv'
 x = []
 ys = {}
 bypass = 1

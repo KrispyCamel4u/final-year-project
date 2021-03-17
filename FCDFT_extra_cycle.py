@@ -23,7 +23,7 @@ def dft(wave,mcycle):
     # print(x1)
     if one_time:
         eq=((x1[2]-x2[1])*math.cos(2*math.pi/N))/((x1[1]-x2[0])*math.cos(4*math.pi/N))
-        A= -(0.5*N*(x1[1]-x1[0]))/ (math.cos(2*math.pi/N) * eq * (pow(eq,N)-1))
+        A= (0.5*N*(x1[1]-x1[0]))/ (math.cos(2*math.pi/N) * eq * (pow(eq,N)-1))
         print(A,eq,(0.5*N*(x1[1]-x1[0])),(math.cos(2*math.pi/N) * eq * (pow(eq,N)-1)))
         # one_time=False
 
@@ -50,7 +50,7 @@ phase = []
 with open(sys.argv[1], 'r') as ifile:
     ifile.readline()
     for s in ifile.readlines():
-        phase.append(float(s.split(',')[1]))
+        phase.append(float(s.split(',')[-1]))
 # print(phase)
 # cycle by cycle dft
 mCycle = int(len(phase)/N)
@@ -66,7 +66,7 @@ for cycle in range(mCycle-1):
 #     output.append([(i+N)*0.0002, params[0], params[1]])
     # print(i+N-1, ' ', (i+N-1)/5000, ' ', dft(phase[i:i+N]))
 
-with open('DC_offset/Mag_phasor.csv', 'w', newline='') as file: 
+with open('Output/output.csv', 'w', newline='') as file: 
     writer = csv.writer(file)
     writer.writerows(output)
 '''

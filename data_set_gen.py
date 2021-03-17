@@ -6,12 +6,12 @@ import numpy as np
 N = 100
 Rm = 150
 f0 = 50
-theta = 30
+theta = -30
 
 w = 2*math.pi*f0
 del_T = 1/(N*f0)
 
-num_cycle = 10
+num_cycle = 20
 # decaying DC
 # gamma 30% to 90%
 # tau 10 to 100ms
@@ -61,7 +61,7 @@ def ddc_offset():
             temp2.append(temp[1])
         output_mag_err.append(temp2)
 
-    with open("Dataset/DC_offset/ddc_offset_mag.csv", "w+", newline='') as ofile:
+    with open("Dataset/ddc_offset_mag.csv", "w+", newline='') as ofile:
         writer = csv.writer(ofile)
         writer.writerow(['time(s)', '30%', '50%', '70%', '90%'])
         writer.writerows(output_mag_err)
@@ -78,7 +78,7 @@ def ddc_offset():
             temp2.append(temp[1])
         output_tou_err.append(temp2)
 
-    with open("Dataset/DC_offset/ddc_offset_tau.csv", "w+", newline='') as ofile:
+    with open("Dataset/ddc_offset_tau.csv", "w+", newline='') as ofile:
         writer = csv.writer(ofile)
         writer.writerow(['time(s)', '10ms', '40ms', '70ms', '100ms'])
         writer.writerows(output_tou_err)

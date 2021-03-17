@@ -2,7 +2,7 @@ import math
 import sys
 
 mag=150
-phase=30
+phase=-30
 
 class TVE:
     def compute_TVE(self,a_M, a_p, e_M, e_p):
