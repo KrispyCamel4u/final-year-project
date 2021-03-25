@@ -17,7 +17,7 @@ corrective_const = mue/360
 
 
 #### fixed matrices ####
-P_matrix = np.array([[round(math.sin(w*T*i+math.radians(v)), 4) 
+P_matrix = np.array([[round(math.cos(w*T*i+math.radians(v)), 4) 
     for v in np.arange(0, 360, mue)] 
     for i in range(1, N+1)])
 
@@ -29,7 +29,7 @@ S_matrix = np.ndarray(shape=[M, N, M], dtype=float)
 for i in range(M):
     for j in range(N):
         for k in range(M):
-            S_matrix[i][j][k] = round(math.sin(w*T*(j+1)+math.radians(mue*(i)+(mue*(k))/M)), 4)
+            S_matrix[i][j][k] = round(math.cos(w*T*(j+1)+math.radians(mue*(i)+(mue*(k))/M)), 4)
 
 #print(S_matrix[0][0][0])
 
@@ -100,6 +100,6 @@ if __name__ == "__main__":
     for cycle in range(int(phase_len/N)):
         output.append([cycle+1, pmu.input_sample(phase[N*cycle: N*(1+cycle)])])
 
-    with open('output/Dict_output.csv', 'w', newline='') as file:
+    with open('Output/Dict_output.csv', 'w+', newline='') as file:
         writer = csv.writer(file)
         writer.writerows(output)

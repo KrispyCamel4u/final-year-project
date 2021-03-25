@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
-import csv
+import csv,sys
 
-filee = 'Dataset/normal.csv'
+filee = sys.argv[1]
 x = []
 ys = {}
 bypass = 1

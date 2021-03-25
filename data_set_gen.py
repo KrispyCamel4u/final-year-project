@@ -3,14 +3,14 @@ import csv
 import numpy as np
 
 ### parameters ###
-N = 100
+N = 50
 Rm = 150
-f0 = 50
-theta = -30
+f0 = 49.5
+theta = 32
 
 w = 2*math.pi*f0
 del_T = 1/(N*f0)
-
+del_T=1/(50*N)
 num_cycle = 20
 # decaying DC
 # gamma 30% to 90%
@@ -163,7 +163,7 @@ def modulation():
 
     for i in range(0, num_cycle*N+1):
         temp2 = [round(i*del_T, 4)]
-        for j in np.arange(f0-2, f0+2+off_nominal_step, off_nominal_step):   # modulation freq
+        for j in np.arange(0, 2+off_nominal_step, off_nominal_step):   # modulation freq
             temp = compute_modulation(i, j, kx, 0)
             temp2.append(temp)
             if i == 1:
@@ -180,7 +180,7 @@ def modulation():
 
     for i in range(0, num_cycle*N+1):
         temp2 = [round(i*del_T, 4)]
-        for j in np.arange(f0-2, f0+2+off_nominal_step, off_nominal_step):   # modulation freq
+        for j in np.arange(0, 2+off_nominal_step, off_nominal_step):   # modulation freq
             temp = compute_modulation(i, j, 0, ka)
             temp2.append(temp)
             if i == 1:
