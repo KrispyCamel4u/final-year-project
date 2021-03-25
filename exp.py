@@ -12,40 +12,45 @@ import matplotlib.pyplot as plt
 #         x.append(float(s.split(',')[0]))
 #         wave.append(float(s.split(',')[1]))
 
-f0, phase, N = 49.9, 60, 50
-dt = 1/(f0*N)
+f0, phase, N = 48, 60, 50
+dt = 1/(50*N)
 f = 50.3
 # dtt=1/(f*N)
 dtt = dt
 
-t = np.arange(0, 0.5, dt)
+t = np.arange(0, 1, dt)
 ideal = np.sin(2*np.pi*f0*t+math.radians(phase))
 # ideal=np.zeros(len(t))
-noise = ideal + 1*np.sin(2*np.pi*2*f0*t+math.radians(phase/2))+0.1 * \
+noise = ideal + 0.06*np.sin(2*np.pi*2*f0*t+math.radians(phase/2))+0.06 * \
     np.sin(2*np.pi*3*f0*t + math.radians(phase/3)) + 0.1*np.sin(2*np.pi*4*f0*t + math.radians(phase/4)) + \
     0.06*np.sin(2*np.pi*5*f0*t + math.radians(phase/5))+0.06 * \
     np.sin(2*np.pi*6*f0*t + math.radians(phase/6))
 
 
-def bw_filter_init(fc, fs):
+def bw_filter_init(fc, fs,order=2):
     wd = 2*math.pi*fc
     Ts = 1/fs
     temp = math.tan((wd*Ts) / 2)
-    M = 1/(temp**2)
-    A = M-math.sqrt(2)+1
-    B = 2-2*M
-    C = M+1+math.sqrt(2)
-    return A, B, C
+    if order==1:
+        M = 1/temp
+        B=1-M
+        C=M+1
+        return B,C
+    elif order==2:
+        M = 1/(temp**2)
+        A = M-math.sqrt(2)+1
+        B = 2-2*M
+        C = M+1+math.sqrt(2)
+        return A, B, C
 
+B1, C1 = bw_filter_init(50, 2500,1)
+A2, B2, C2 = bw_filter_init(50, 2500)
 
-A, B, C = bw_filter_init(50, 2500)
-
-
-def filter(noise):
+def first_order_butter(noise):
     out = np.zeros(len(noise))
     # out[0] = noise[0]
     for i in range(1, len(noise)):
-        out[i] = 0.0000046*(noise[i]+noise[i-1])+0.999999*out[i-1]
+        out[i] = (1/C1)*(noise[i] + noise[i-1] - B1*out[i-1])
         # out[i] = noise[i]+out[i-1]
     return out
 
@@ -56,8 +61,8 @@ def second_order_butter(noise):
     for i in range(2, len(noise)):
         # out[i] = 0.0078*(noise[i]+noise[i-2])+0.0156 * \
         #     noise[i-1]-0.7656*out[i-2]+1.734*out[i-1]
-        out[i] = (1/C)*(noise[i] + noise[i-2] + 2 *
-                        noise[i-1] - A*out[i-2] - B*out[i-1])
+        out[i] = (1/C2)*(noise[i] + noise[i-2] + 2 *
+                        noise[i-1] - A2*out[i-2] - B2*out[i-1])
     return out
 
 
@@ -77,15 +82,18 @@ def find_frequency(wave):
     return 1/T
 
 
-filtered = filter(noise)
+filtered = first_order_butter(noise)
 filtered2 = second_order_butter(noise)
 
 ncycle = len(ideal)/N
-freq_est = []
+freq_est2 = []
+freq_est1 = []
 for cycle in range(int(ncycle)):
-    freq_est.append(find_frequency(filtered2[cycle*N:cycle*N+N]))
+    freq_est2.append(find_frequency(filtered2[cycle*N:cycle*N+N]))
+    freq_est1.append(find_frequency(filtered[cycle*N:cycle*N+N]))
 
-print(freq_est)
+print(freq_est2)
+# print(freq_est1)
 # x=range(N)
 print('helo')
 # print(sum((fx*fxx)*dt))
