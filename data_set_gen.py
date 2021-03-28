@@ -3,7 +3,7 @@ import csv
 import numpy as np
 
 ### parameters ###
-N = 50
+N = 100
 Rm = 150
 f0 = 50
 theta = 32
