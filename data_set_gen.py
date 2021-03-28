@@ -5,7 +5,7 @@ import numpy as np
 ### parameters ###
 N = 50
 Rm = 150
-f0 = 49.5
+f0 = 50
 theta = 32
 
 w = 2*math.pi*f0
