@@ -51,7 +51,7 @@ def dft_modified1(wave,sample):
 
     I_fundamental_dft=I_dft-I_dc_dft
 
-    # phase_angle=math.degrees(cmath.phase(I_fundamental_dft))
+    phase_angle=math.degrees(cmath.phase(I_fundamental_dft))
     # factor=(360/N)*(sample%N)
     # if one_time:
     #     prev_phase=phase_angle
@@ -77,7 +77,7 @@ phase = []
 with open(sys.argv[1], 'r') as ifile:
     ifile.readline()
     for s in ifile.readlines():
-        phase.append(float(s.split(',')[-5]))
+        phase.append(float(s.split(',')[1]))
 
 
 # cycle by cycle dft
