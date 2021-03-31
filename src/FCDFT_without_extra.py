@@ -91,6 +91,6 @@ for i in range(len(phase)-N+1):
     params=dft_modified1(phase[i:i+N],i)
     output.append([round((i+N)*0.0002, 4), params[0], params[1]])
 
-with open('Output/output.csv', 'w+', newline='') as file: 
+with open('../Output/output.csv', 'w+', newline='') as file: 
     writer = csv.writer(file)
     writer.writerows(output)

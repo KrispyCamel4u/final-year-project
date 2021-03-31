@@ -45,7 +45,7 @@ def normal():
         temp2.append(temp[0])
         output_mag_err.append(temp2)
 
-    with open("Dataset/normal.csv", "w+", newline='') as ofile:
+    with open("../Dataset/normal.csv", "w+", newline='') as ofile:
         writer = csv.writer(ofile)
         writer.writerow(['time(s)', 'signal'])
         writer.writerows(output_mag_err)
@@ -61,7 +61,7 @@ def ddc_offset():
             temp2.append(temp[1])
         output_mag_err.append(temp2)
 
-    with open("Dataset/ddc_offset_mag.csv", "w+", newline='') as ofile:
+    with open("../Dataset/ddc_offset_mag.csv", "w+", newline='') as ofile:
         writer = csv.writer(ofile)
         writer.writerow(['time(s)', '30%', '50%', '70%', '90%'])
         writer.writerows(output_mag_err)
@@ -78,7 +78,7 @@ def ddc_offset():
             temp2.append(temp[1])
         output_tou_err.append(temp2)
 
-    with open("Dataset/ddc_offset_tau.csv", "w+", newline='') as ofile:
+    with open("../Dataset/ddc_offset_tau.csv", "w+", newline='') as ofile:
         writer = csv.writer(ofile)
         writer.writerow(['time(s)', '10ms', '40ms', '70ms', '100ms'])
         writer.writerows(output_tou_err)
@@ -115,7 +115,7 @@ def harmonics():
                 header.append(str(j)+'%')
         output_mag_err.append(temp2)
 
-    with open("Dataset/with_harmonics.csv", "w+", newline='') as ofile:
+    with open("../Dataset/with_harmonics.csv", "w+", newline='') as ofile:
         writer = csv.writer(ofile)
         writer.writerow(header)
         writer.writerows(output_mag_err)
@@ -145,7 +145,7 @@ def off_nominal_freq():
                 header.append(str(j)+'Hz')
         output_mag_err.append(temp2)
 
-    with open("Dataset/off_nominal_freq.csv", "w+", newline='') as ofile:
+    with open("../Dataset/off_nominal_freq.csv", "w+", newline='') as ofile:
         writer = csv.writer(ofile)
         writer.writerow(header)
         writer.writerows(output_mag_err)
@@ -170,7 +170,7 @@ def modulation():
                 header.append(str(j)+'Hz')
         output_mag_err.append(temp2)
 
-    with open("Dataset/magnitude_modulation.csv", "w", newline='') as ofile:
+    with open("../Dataset/magnitude_modulation.csv", "w", newline='') as ofile:
         writer = csv.writer(ofile)
         writer.writerow(header)
         writer.writerows(output_mag_err)
@@ -187,7 +187,7 @@ def modulation():
                 header.append(str(j)+'Hz')
         output_mag_err.append(temp2)
 
-    with open("Dataset/phase_modulation.csv", "w+", newline='') as ofile:
+    with open("../Dataset/phase_modulation.csv", "w+", newline='') as ofile:
         writer = csv.writer(ofile)
         writer.writerow(header)
         writer.writerows(output_mag_err)
@@ -218,7 +218,7 @@ def step():
                 header.append(str(j)+'sample')
         output_mag_err.append(temp2)
 
-    with open("Dataset/magnitude_step.csv", "w+", newline='') as ofile:
+    with open("../Dataset/magnitude_step.csv", "w+", newline='') as ofile:
         writer = csv.writer(ofile)
         writer.writerow(header)
         writer.writerows(output_mag_err)
@@ -235,7 +235,7 @@ def step():
                 header.append(str(j)+'sample')
         output_mag_err.append(temp2)
 
-    with open("Dataset/phase_step.csv", "w+", newline='') as ofile:
+    with open("../Dataset/phase_step.csv", "w+", newline='') as ofile:
         writer = csv.writer(ofile)
         writer.writerow(header)
         writer.writerows(output_mag_err)
@@ -264,7 +264,7 @@ def freq_ramp():
                 header.append(str(j)+'sample')
         output_mag_err.append(temp2)
 
-    with open("Dataset/freq_ramp.csv", "w+", newline='') as ofile:
+    with open("../Dataset/freq_ramp.csv", "w+", newline='') as ofile:
         writer = csv.writer(ofile)
         writer.writerow(header)
         writer.writerows(output_mag_err)

@@ -35,7 +35,7 @@ for cycle in range(mCycle):
 #     output.append([(i+N)*0.0002, params[0], params[1]])
     # print(i+N-1, ' ', (i+N-1)/5000, ' ', dft(phase[i:i+N]))
 
-with open('Output/output.csv', 'w+', newline='') as file: 
+with open('../Output/output.csv', 'w+', newline='') as file: 
     writer = csv.writer(file)
     writer.writerows(output)
 '''

@@ -121,6 +121,6 @@ if __name__ == "__main__":
     # for k,i in enumerate(np.transpose(P_matrix)):
     #     print(k*10,sum(np.array(phase[0:N])*i))
 
-    with open('Output/Dict_output.csv', 'w', newline='') as file:
+    with open('../Output/Dict_output.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerows(output)
