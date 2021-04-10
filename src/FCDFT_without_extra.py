@@ -48,7 +48,6 @@ def dft_modified1(wave,sample):
     E=(Kimg)/(Kre*math.sin(2*math.pi/N)-Kimg*math.cos(2*math.pi/N))  
 
     I_dc_dft=(I_even-I_odd)*(1+E*jexp(-2*math.pi/N))/(1-E*jexp(-2*math.pi/N))
-    print(I_dft, I_dc_dft)
     I_fundamental_dft=I_dft-I_dc_dft
 
     phase_angle=math.degrees(cmath.phase(I_fundamental_dft))
