@@ -10,10 +10,11 @@ class shift_samples:
     def shift(self, wave, est_freq, N):
         out = [0 for i in range(N)]
         wave_len = len(wave)
-        out[N-1] = wave[wave_len-1]
-
-        for k in range(wave_len-2, wave_len-N-6, -1):
+        out[N-1] = wave[wave_len-3]
+        for k in range(wave_len-4, wave_len-N-5, -1):
             alpha = (k-wave_len+1)*(est_freq - self.nominal_freq)/est_freq
+            if(est_freq > self.nominal_freq):
+                alpha = -1 - alpha
             alpha, p = shift_samples.temp(abs(alpha), alpha, k, est_freq<=self.nominal_freq)
 
             alpha2 = alpha*alpha
@@ -27,14 +28,16 @@ class shift_samples:
     def temp(beta, alpha, k, freq_bool):
         if(beta < 0.5):
             p = k
+            if(~freq_bool):
+                p += 1
         else:
             rounded_beta = int(round(beta, 0))
             if(freq_bool):
-                alpha = -rounded_beta + alpha
+                alpha = -rounded_beta + alpha 
                 p = k - rounded_beta
             else:
-                alpha = rounded_beta - alpha
-                p = k + rounded_beta
+                alpha = rounded_beta - alpha 
+                p = k + rounded_beta + 1
         #elif(beta <= 1.5 and beta > 0.5):
         #    if (freq_bool):
         #        alpha = -1 + alpha
@@ -92,6 +95,7 @@ class shift_samples:
     def shift3(self, wave, est_freq, N):
         out = [0 for i in range(N)]
         wave_len = len(wave)
+        print(wave_len)
         out[0] = wave[0]
         freq_diff = (est_freq - self.nominal_freq)/est_freq
 
@@ -100,9 +104,8 @@ class shift_samples:
             alpha, p = shift_samples.temp(abs(alpha), alpha, k, est_freq<=self.nominal_freq)
             alpha2 = alpha*alpha
             b0 = 1 - alpha2
-            b1 = 0.5*(1 + alpha2)
-            b2 = 0.5*(-1 + alpha2)
-            
+            b2 = 0.5*(1 + alpha2)
+            b1 = 0.5*(-1 + alpha2)
             out[k] = b0*wave[p] + b1*wave[p+1] + b2*wave[p-1]
 
         return out

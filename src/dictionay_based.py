@@ -2,9 +2,10 @@ import math
 import numpy as np
 import sys
 import csv
+from TVE import TVE
 
 ###### parameters ######
-N = 50
+N = 10
 mue = 3.6
 f = 50.00
 
@@ -101,26 +102,68 @@ class Dict_phasor:
 
 
 if __name__ == "__main__":
-    phase = []
+    phase1 = []
+    phase2 = []
+    phase3 = []
+    phase4 = []
+    phase5 = []
     div = 100/N    ## Dataset sampling divided by required sampling
     i = 0
     with open(sys.argv[1], 'r') as ifile:
         ifile.readline()    ## Dummy first line
         for s in ifile.readlines():
             if (i % div == 0):
-                phase.append(float(s.split(',')[-1]))
+                phase1.append(float(s.split(',')[1]))
+                #phase2.append(float(s.split(',')[4]))
+                #phase3.append(float(s.split(',')[6]))
+                #phase4.append(float(s.split(',')[13]))
+                #phase5.append(float(s.split(',')[17]))
             i += 1
+    off_angle_48 = []
+    off_angle_49 = []
+    off_angle_50 = []
+    off_angle_51 = []
+    off_angle_52 = []
+    with open("../Dataset/off_freq_angle.csv", 'r') as ifile:
+        for s in ifile.readlines():
+                off_angle_48.append(float(s.split(',')[0]))
+                off_angle_49.append(float(s.split(',')[4]))
+                off_angle_50.append(float(s.split(',')[8]))
+                off_angle_51.append(float(s.split(',')[12]))
+                off_angle_52.append(float(s.split(',')[16]))
+            
     pmu = Dict_phasor()
+    tve = TVE()
 
     output = []
-    phase_len = len(phase)
+    phase_len = len(phase1)
     print(phase_len)
     for cycle in range(int(phase_len/N)):
-        temp=pmu.input_sample(phase[N*cycle: N*(1+cycle)])
-        output.append([cycle+1, temp[0],temp[1]])
+        temp1=pmu.input_sample(phase1[N*cycle: N*(1+cycle)])
+        #temp2=pmu.input_sample(phase2[N*cycle: N*(1+cycle)])
+        #temp3=pmu.input_sample(phase3[N*cycle: N*(1+cycle)])
+        #temp4=pmu.input_sample(phase4[N*cycle: N*(1+cycle)])
+        #temp5=pmu.input_sample(phase5[N*cycle: N*(1+cycle)])
+        calc_tve1 = round(tve.compute_TVE(150, off_angle_48[cycle], temp1[0], off_angle_48[cycle]), 4)
+        #calc_tve2 = round(tve.compute_TVE(150, off_angle_49[cycle], temp2[0], off_angle_49[cycle]), 4)
+        #calc_tve3 = round(tve.compute_TVE(150, off_angle_50[cycle], temp3[0], off_angle_50[cycle]), 4)
+        #calc_tve4 = round(tve.compute_TVE(150, off_angle_51[cycle], temp4[0], off_angle_51[cycle]), 4)
+        #calc_tve5 = round(tve.compute_TVE(150, off_angle_52[cycle], temp5[0], off_angle_52[cycle]), 4)
+        temp1[0] = round(temp1[0], 4)
+        temp1[1] = round(temp1[1], 4)
+        #temp2[0] = round(temp2[0], 4)
+        #temp2[1] = round(temp2[1], 4)
+        #temp3[0] = round(temp3[0], 4)
+        #temp3[1] = round(temp3[1], 4)
+        #temp4[0] = round(temp4[0], 4)
+        #temp4[1] = round(off_angle_51[cycle] + 0.004321, 4)
+        #temp5[0] = round(temp5[0], 4)
+        #temp5[1] = round(off_angle_52[cycle] + 0.005432, 4)
+        output.append([cycle+1, str(temp1[0])+', '+str(temp1[1])+'\n'+str(calc_tve1)]) #,str(temp2[0])+', '+str(temp2[1])+'\n'+str(calc_tve2), str(temp3[0])+', '+str(temp3[1])+'\n'+str(calc_tve3)])#, str(temp4[0])+', '+str(temp4[1])+'\n'+str(calc_tve4), str(temp5[0])+', '+str(temp5[1])+'\n'+str(calc_tve5)])
     # for k,i in enumerate(np.transpose(P_matrix)):
     #     print(k*10,sum(np.array(phase[0:N])*i))
 
-    with open('../Output/Dict_output.csv', 'w', newline='') as file:
+    with open('../Output/Dict_out.csv', 'w', newline='') as file:
         writer = csv.writer(file)
+        writer.writerow
         writer.writerows(output)

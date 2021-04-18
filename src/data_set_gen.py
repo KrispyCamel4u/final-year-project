@@ -44,6 +44,9 @@ def normal():
         temp = compute_ddc(i, 0, 1)
         temp2.append(temp[0])
         output_mag_err.append(temp2)
+        if (i < N+6):
+            print(temp2[1], ',', end='')
+
 
     with open("../Dataset/normal.csv", "w+", newline='') as ofile:
         writer = csv.writer(ofile)
@@ -59,6 +62,8 @@ def ddc_offset():
         for j in range(3, 10, 2):
             temp = compute_ddc(i, Rm*j/10, tou)
             temp2.append(temp[1])
+            #if (j == 3):
+            #    print(temp[1], ',', end='')
         output_mag_err.append(temp2)
 
     with open("../Dataset/ddc_offset_mag.csv", "w+", newline='') as ofile:
@@ -126,7 +131,8 @@ def harmonics():
 
 
 def compute_off_nominal(n, freq):
-    return round(Rm * math.cos(2*math.pi*freq*del_T*n + math.radians(theta)), 4)
+    angle = 2*math.pi*freq*del_T*n + math.radians(theta)
+    return round(Rm * math.cos(angle), 4), round(math.degrees(angle)%360, 4)
 
 
 off_nominal_step = 0.25
@@ -134,21 +140,30 @@ off_nominal_step = 0.25
 
 def off_nominal_freq():
     output_mag_err = []
+    changed_angles = []
     header = ['time(s)']
 
     for i in range(0, num_cycle*N+1):
         temp2 = [round(i*del_T, 4)]
+        changed_angle = []
         for j in np.arange(f0-2, f0+2+off_nominal_step, off_nominal_step):
-            temp = compute_off_nominal(i, j)
+            temp, angle = compute_off_nominal(i, j)
             temp2.append(temp)
+            if (i % N == 0):
+                changed_angle.append(angle)
             if i == 1:
                 header.append(str(j)+'Hz')
         output_mag_err.append(temp2)
+        if (i % N == 0):
+            changed_angles.append(changed_angle)
 
     with open("../Dataset/off_nominal_freq.csv", "w+", newline='') as ofile:
         writer = csv.writer(ofile)
         writer.writerow(header)
         writer.writerows(output_mag_err)
+    with open("../Dataset/off_freq_angle.csv", "w+", newline='') as ofile:
+        writer = csv.writer(ofile)
+        writer.writerows(changed_angles)
 
 ######### for magnitude modulation #####
 
